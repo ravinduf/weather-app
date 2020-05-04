@@ -9,13 +9,18 @@ def index(request):
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=4ada227d2084bef19fb1c459fadd44a6'
     
     cities = City.objects.all()
-    
+    cityNames = []
+    [cityNames.append(city.name) for city in cities]
     form = cityForm()
-
+    alert = None
     if request.method == 'POST':
         form = cityForm(request.POST)
         if form.is_valid():
-            form.save()
+            city = form.save(commit=False)
+            if city in cityNames:
+                pass
+            else:
+                city.save()
 
 
     weather_data = []
